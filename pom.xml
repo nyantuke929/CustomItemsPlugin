@@ -22,11 +22,6 @@
             <id>papermc</id>
             <url>https://repo.papermc.io/repository/maven-public/</url>
         </repository>
-        <!-- Paper NMS プラグイン用 -->
-        <repository>
-            <id>bytecode-space</id>
-            <url>https://repo.bytecode.space/repository/maven-public/</url>
-        </repository>
     </repositories>
 
     <pluginRepositories>
@@ -46,21 +41,10 @@
             <scope>provided</scope>
         </dependency>
         
-        <!-- Paper NMS (Mojang マッピング版) -->
-        <dependency>
-            <groupId>ca.bkaw</groupId>
-            <artifactId>paper-nms</artifactId>
-            <version>1.21.3-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
-        
-        <!-- Mojang DataFixerUpper (Serializationに必要) -->
-        <dependency>
-            <groupId>com.mojang</groupId>
-            <artifactId>datafixerupper</artifactId>
-            <version>8.0.16</version>
-            <scope>provided</scope>
-        </dependency>
+        <!-- 
+            paper-nms依存関係は削除
+            paper-nms-maven-pluginが自動的にNMSクラスへのアクセスを提供します
+        -->
     </dependencies>
 
     <build>
