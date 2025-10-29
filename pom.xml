@@ -14,18 +14,22 @@
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- JitPack用: ビルドをスキップしない -->
+        <maven.test.skip>true</maven.test.skip>
     </properties>
 
     <repositories>
-        <!-- Paper API -->
         <repository>
             <id>papermc</id>
             <url>https://repo.papermc.io/repository/maven-public/</url>
         </repository>
+        <repository>
+            <id>bytecode-space</id>
+            <url>https://repo.bytecode.space/repository/maven-public/</url>
+        </repository>
     </repositories>
 
     <pluginRepositories>
-        <!-- Paper NMS Maven Plugin -->
         <pluginRepository>
             <id>bytecode-space</id>
             <url>https://repo.bytecode.space/repository/maven-public/</url>
@@ -33,7 +37,6 @@
     </pluginRepositories>
 
     <dependencies>
-        <!-- Paper API (通常のBukkit API) -->
         <dependency>
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
@@ -41,15 +44,26 @@
             <scope>provided</scope>
         </dependency>
         
-        <!-- 
-            paper-nms依存関係は削除
-            paper-nms-maven-pluginが自動的にNMSクラスへのアクセスを提供します
-        -->
+        <dependency>
+            <groupId>ca.bkaw</groupId>
+            <artifactId>paper-nms</artifactId>
+            <version>1.21.3-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.mojang</groupId>
+            <artifactId>datafixerupper</artifactId>
+            <version>8.0.16</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <build>
+        <defaultGoal>clean package</defaultGoal>
+        <finalName>${project.artifactId}-${project.version}</finalName>
+        
         <plugins>
-            <!-- コンパイラ設定 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -57,33 +71,25 @@
                 <configuration>
                     <source>21</source>
                     <target>21</target>
+                    <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
             
-            <!-- Paper NMS Maven Plugin -->
             <plugin>
                 <groupId>ca.bkaw</groupId>
                 <artifactId>paper-nms-maven-plugin</artifactId>
                 <version>1.4.10</version>
                 <executions>
                     <execution>
-                        <id>init-nms</id>
-                        <phase>initialize</phase>
-                        <goals>
-                            <goal>init</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>remap-nms</id>
                         <phase>process-classes</phase>
                         <goals>
+                            <goal>init</goal>
                             <goal>remap</goal>
                         </goals>
                     </execution>
                 </executions>
             </plugin>
             
-            <!-- Shade Plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
@@ -96,12 +102,22 @@
                         </goals>
                         <configuration>
                             <minimizeJar>false</minimizeJar>
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
+                            <filters>
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>META-INF/*.SF</exclude>
+                                        <exclude>META-INF/*.DSA</exclude>
+                                        <exclude>META-INF/*.RSA</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
             
-            <!-- JAR Plugin (Mojangマッピングを使用することを宣言) -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
@@ -109,10 +125,19 @@
                 <configuration>
                     <archive>
                         <manifestEntries>
-                            <!-- Paper 1.20.5以降はMojangマッピングランタイム -->
                             <paperweight-mappings-namespace>mojang</paperweight-mappings-namespace>
                         </manifestEntries>
                     </archive>
+                </configuration>
+            </plugin>
+            
+            <!-- Maven Surefire: テストをスキップ -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.2.5</version>
+                <configuration>
+                    <skipTests>true</skipTests>
                 </configuration>
             </plugin>
         </plugins>
