@@ -1,19 +1,21 @@
 name: CustomItemsPlugin
-version: 1.0
+version: 1.0.0
 main: com.example.customitems.CustomItemsPlugin
 api-version: 1.21
-author: ntn929
-description: NMS Custom Items Plugin for Paper 1.21.3 (Fixed Version)
+author: YourName
+description: Custom items API with version support (1.21.3, 1.21.4, 1.21.8)
 
 commands:
   customitem:
-    description: カスタムアイテムを取得
-    usage: /customitem <item_id> [amount]
+    description: カスタムアイテム管理コマンド
+    usage: /customitem <give|list|check|version>
     aliases: [ci, citem]
-    permission: customitems.give
-    permission-message: §cこのコマンドを実行する権限がありません
+    permission: customitems.use
 
 permissions:
-  customitems.give:
-    description: カスタムアイテムを取得する権限
+  customitems.use:
+    description: カスタムアイテムコマンドの使用権限
+    default: op
+  customitems.admin:
+    description: カスタムアイテム管理権限
     default: op
