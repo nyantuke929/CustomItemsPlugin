@@ -1,0 +1,275 @@
+# ====================================
+# PaperItemAPI Configuration
+# ====================================
+# Version: 1.0.0
+# Author: ntn929
+# ====================================
+
+# ====================================
+# 基本設定
+# ====================================
+
+# デバッグモード
+# true: 詳細なログを出力
+# false: 通常のログのみ
+debug: false
+
+# アイテム登録時のログ出力
+# true: カスタムアイテムが登録されるたびにログに記録
+# false: ログに記録しない
+log-registration: true
+
+# カスタムアイテムの最大登録数
+# 0: 無制限
+# 1以上: 指定した数まで登録可能
+max-registered-items: 0
+
+# ====================================
+# アイテム設定
+# ====================================
+
+# アイテムスタック取得時のデフォルト個数
+default-stack-size: 1
+
+# アイテムの最大スタックサイズ（デフォルト）
+# カスタムアイテムで個別に設定しない場合に使用
+default-max-stack-size: 64
+
+# ====================================
+# 表示設定
+# ====================================
+
+# F3+Hでの表示形式
+display-format:
+  # カスタムIDを表示するか
+  show-custom-id: true
+  
+  # コンポーネント情報を表示するか
+  show-components: true
+  
+  # マテリアル名を表示するか
+  show-material: true
+
+# ====================================
+# パフォーマンス設定
+# ====================================
+
+performance:
+  # キャッシュの有効化
+  # true: アイテム検索結果をキャッシュして高速化
+  # false: キャッシュを使用しない
+  enable-cache: true
+  
+  # キャッシュサイズ（アイテム数）
+  # キャッシュに保存する最大アイテム数
+  cache-size: 1000
+  
+  # キャッシュの有効期限（秒）
+  # 0: 無期限
+  cache-expiration: 300
+  
+  # 非同期処理の有効化
+  # true: 重い処理を非同期で実行
+  # false: すべて同期処理
+  async-processing: true
+
+# ====================================
+# データベース設定（将来の拡張用）
+# ====================================
+
+database:
+  # データベースの使用
+  # false: メモリのみ（再起動で消える）
+  # true: データベースに保存（未実装）
+  enabled: false
+  
+  # データベースタイプ
+  # sqlite, mysql, postgresql
+  type: sqlite
+  
+  # 接続設定
+  host: localhost
+  port: 3306
+  database: paperitemapi
+  username: root
+  password: ''
+
+# ====================================
+# セキュリティ設定
+# ====================================
+
+security:
+  # カスタムIDの検証を厳格にする
+  # true: namespace:key形式のみ許可
+  # false: 柔軟に許可
+  strict-id-validation: true
+  
+  # 危険なコンポーネントの制限
+  # NBTやコマンドなど、悪用される可能性のあるデータの制限
+  restrict-dangerous-components: true
+  
+  # 登録できるnamespaceの制限
+  # 空リストの場合はすべて許可
+  allowed-namespaces: []
+  # 例:
+  # - myitem
+  # - custom
+  # - special
+
+# ====================================
+# コマンド設定
+# ====================================
+
+commands:
+  # /customitem コマンドの有効化
+  customitem:
+    enabled: true
+    
+    # giveコマンドで付与できる最大個数
+    max-give-amount: 64
+    
+    # コマンド使用時のクールダウン（秒）
+    # 0: クールダウンなし
+    cooldown: 0
+  
+  # /listitems コマンドの有効化
+  listitems:
+    enabled: true
+    
+    # 1ページあたりの表示数
+    items-per-page: 10
+
+# ====================================
+# メッセージ設定
+# ====================================
+
+messages:
+  # メッセージの言語
+  # ja: 日本語
+  # en: English
+  language: ja
+  
+  # カスタムメッセージ（オーバーライド可能）
+  custom:
+    item-received: '&aカスタムアイテムを受け取りました: &e{item}'
+    item-not-found: '&cカスタムアイテムが見つかりません: &e{item}'
+    no-permission: '&cこのコマンドを実行する権限がありません'
+    player-not-found: '&cプレイヤーが見つかりません: &e{player}'
+    invalid-amount: '&c無効な個数です: &e{amount}'
+
+# ====================================
+# 統合設定
+# ====================================
+
+integration:
+  # 他のプラグインとの統合
+  
+  # PlaceholderAPI統合
+  placeholderapi:
+    enabled: false
+  
+  # Vault統合（経済システム）
+  vault:
+    enabled: false
+    
+    # アイテム購入機能
+    item-shop:
+      enabled: false
+      
+      # デフォルト価格
+      default-price: 1000
+
+# ====================================
+# イベント設定
+# ====================================
+
+events:
+  # カスタムアイテム使用時のイベント発火
+  fire-custom-events: true
+  
+  # イベント優先度
+  # LOWEST, LOW, NORMAL, HIGH, HIGHEST, MONITOR
+  event-priority: NORMAL
+  
+  # イベントログ
+  log-events: false
+
+# ====================================
+# 自動保存設定
+# ====================================
+
+auto-save:
+  # 自動保存の有効化（将来の機能）
+  enabled: false
+  
+  # 自動保存間隔（分）
+  interval: 5
+  
+  # 保存ファイル形式
+  # json, yaml
+  format: json
+
+# ====================================
+# バックアップ設定
+# ====================================
+
+backup:
+  # バックアップの有効化（将来の機能）
+  enabled: false
+  
+  # バックアップ間隔（時間）
+  interval: 24
+  
+  # 保存するバックアップの最大数
+  max-backups: 7
+  
+  # バックアップフォルダ
+  folder: backups
+
+# ====================================
+# 開発者向け設定
+# ====================================
+
+developer:
+  # APIの詳細ログ
+  api-debug: false
+  
+  # パフォーマンス計測
+  performance-monitoring: false
+  
+  # スタックトレースの表示
+  show-stack-traces: false
+  
+  # テストモード
+  test-mode: false
+
+# ====================================
+# 実験的機能
+# ====================================
+
+experimental:
+  # 実験的機能の有効化
+  # 注意: 不安定な可能性があります
+  enabled: false
+  
+  # 新しいデータコンポーネントシステム
+  new-component-system: false
+  
+  # アイテムのシリアライゼーション最適化
+  optimized-serialization: false
+
+# ====================================
+# メンテナンスモード
+# ====================================
+
+maintenance:
+  # メンテナンスモード
+  # true: カスタムアイテムの使用を制限
+  # false: 通常動作
+  enabled: false
+  
+  # メンテナンスメッセージ
+  message: '&cメンテナンス中です。しばらくお待ちください。'
+  
+  # 管理者は使用可能か
+  allow-admins: true

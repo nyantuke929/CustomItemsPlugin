@@ -1,0 +1,7 @@
+name: PaperItemAPI
+version: 1.0.0-SNAPSHOT
+main: io.github.ntn929.paperitemapi.PaperItemAPI
+api-version: '1.21'
+author: ntn929
+description: Custom Data Component API for Paper 1.21.8
+website: https://github.com/ntn929/PaperItemAPI
