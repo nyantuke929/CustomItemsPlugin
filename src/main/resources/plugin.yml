@@ -2,8 +2,8 @@ name: CustomItemsPlugin
 version: 1.0
 main: com.example.customitems.CustomItemsPlugin
 api-version: 1.21
-author: YourName
-description: NMS Custom Items Plugin for 1.21.8
+author: ntn929
+description: NMS Custom Items Plugin for Paper 1.21.3 (Fixed Version)
 
 commands:
   customitem:
