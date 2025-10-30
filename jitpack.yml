@@ -1,0 +1,8 @@
+jdk:
+  - openjdk21
+before_install:
+  - echo "Building CustomItemsPlugin for JitPack"
+install:
+  - mvn clean install -DskipTests
+env:
+  MAVEN_OPTS: "-Xmx2048m"
