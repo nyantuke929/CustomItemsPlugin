@@ -1,26 +1,22 @@
-# 🎮 PaperItemAPI
+# CustomItemAPI
 
-[![](https://jitpack.io/v/ntn929/PaperItemAPI.svg)](https://jitpack.io/#ntn929/PaperItemAPI)
-[![Java](https://img.shields.io/badge/Java-21-orange.svg)](https://www.oracle.com/java/)
-[![Minecraft](https://img.shields.io/badge/Minecraft-1.21.8-green.svg)](https://papermc.io/)
-[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+Paper 1.21.8用のカスタムアイテムAPI - `minecraft:diamond`のような独自アイテムID（例：`myplugin:chip`）を簡単に作成できます。
 
-Minecraft 1.21.8用のカスタムアイテムデータコンポーネントAPI
+## 機能
 
-完全カスタムアイテムを作成し、F3+Hで`minecraft:diamond`のような独自アイテムIDを表示できます。
+- ✅ カスタムアイテムID（NamespacedKey形式）
+- ✅ カスタムテクスチャ（CustomModelData）
+- ✅ アイテム名・説明文
+- ✅ エンチャント
+- ✅ アイテムフラグ
+- ✅ 破壊不可能設定
+- ✅ 数量設定
+- ✅ 簡単なビルダーパターン
 
-## ✨ 特徴
-
-- 🎯 **完全カスタムアイテム** - `namespace:key`形式の独自アイテムID
-- 💾 **データコンポーネント** - 10種類のデータ型をサポート
-- 🔧 **簡単なAPI** - ビルダーパターンで直感的に作成
-- ⚡ **高性能** - インデックスとキャッシュによる高速検索
-- 🔒 **スレッドセーフ** - マルチスレッド環境で安全
-- 📦 **軽量** - 依存関係はPaper APIのみ
-
-## 📦 インストール
+## 依存関係の追加
 
 ### Maven
+
 ```xml
 <repositories>
     <repository>
@@ -32,7 +28,7 @@ Minecraft 1.21.8用のカスタムアイテムデータコンポーネントAPI
 <dependencies>
     <dependency>
         <groupId>com.github.ntn929</groupId>
-        <artifactId>PaperItemAPI</artifactId>
+        <artifactId>CustomItemAPI</artifactId>
         <version>1.0.0</version>
         <scope>provided</scope>
     </dependency>
@@ -40,183 +36,80 @@ Minecraft 1.21.8用のカスタムアイテムデータコンポーネントAPI
 ```
 
 ### Gradle
+
 ```gradle
 repositories {
     maven { url 'https://jitpack.io' }
 }
 
 dependencies {
-    compileOnly 'com.github.ntn929:PaperItemAPI:1.0.0'
+    compileOnly 'com.github.ntn929:CustomItemAPI:1.0.0'
 }
 ```
 
-## 🚀 使用例
+## 使い方
 
-### 基本的な使い方
+### 1. APIの初期化
+
 ```java
-import io.github.ntn929.paperitemapi.PaperItemAPI;
-import io.github.ntn929.paperitemapi.item.*;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
-import org.bukkit.Material;
-
-// カスタムアイテムの作成
-CustomItem legendarySword = new CustomItemBuilder("myitem:legendary_sword", Material.DIAMOND_SWORD)
-    .displayName(Component.text("伝説の剣").color(NamedTextColor.GOLD))
-    .lore(
-        "古代の力を宿した剣",
-        "攻撃力: +100",
-        "耐久力: 無限"
-    )
-    .customModelData(1001)
-    .addComponent("attack_power", 100)
-    .addComponent("legendary", true)
-    .addComponent("rarity", "legendary")
-    .unbreakable()
-    .build();
-
-// レジストリに登録
-PaperItemAPI.getInstance().getItemRegistry().register(legendarySword);
-
-// ItemStackとして取得
-ItemStack item = legendarySword.toItemStack();
-
-// プレイヤーに付与
-player.getInventory().addItem(item);
-```
-
-### アイテムの検証
-```java
-// ItemStackがカスタムアイテムかチェック
-CustomItem customItem = PaperItemAPI.getInstance()
-    .getItemRegistry()
-    .getFromItemStack(itemStack);
-
-if (customItem != null) {
-    // カスタムアイテムの処理
-    String id = customItem.getCustomId();
-    player.sendMessage("カスタムアイテム: " + id);
-}
-```
-
-### コンポーネントの使用
-```java
-// 様々な型のコンポーネント
-CustomItem magicWand = new CustomItemBuilder("myitem:magic_wand", Material.STICK)
-    .displayName("魔法の杖")
-    .addComponent("mana", 500)              // Integer
-    .addComponent("spell_type", "fire")     // String
-    .addComponent("power", 99.5)            // Double
-    .addComponent("enchanted", true)        // Boolean
-    .addComponent("created_at", System.currentTimeMillis())  // Long
-    .build();
-```
-
-### イベントリスナー
-```java
-@EventHandler
-public void onPlayerInteract(PlayerInteractEvent event) {
-    ItemStack item = event.getItem();
-    if (item == null) return;
-    
-    CustomItem customItem = PaperItemAPI.getInstance()
-        .getItemRegistry()
-        .getFromItemStack(item);
-    
-    if (customItem != null && customItem.getCustomId().equals("myitem:legendary_sword")) {
-        Player player = event.getPlayer();
-        
-        // コンポーネントから値を取得
-        Object power = customItem.getComponentValue(item, "attack_power");
-        if (power instanceof Integer) {
-            player.sendMessage("攻撃力: " + power);
-        }
-        
-        // 特別な効果を発動
-        player.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH, 200, 2));
+public class YourPlugin extends JavaPlugin {
+    @Override
+    public void onEnable() {
+        CustomItemAPI.initialize(this);
     }
 }
 ```
 
-## 📚 API リファレンス
+### 2. カスタムアイテムの作成
 
-### CustomItemBuilder
-
-| メソッド | 説明 |
-|---------|------|
-| `displayName(Component)` | 表示名を設定 |
-| `lore(String...)` | Loreを設定 |
-| `customModelData(int)` | カスタムモデルデータを設定 |
-| `unbreakable()` | 耐久無限にする |
-| `addComponent(String, T)` | コンポーネントを追加 |
-| `build()` | CustomItemを構築 |
-
-### CustomItemRegistry
-
-| メソッド | 説明 |
-|---------|------|
-| `register(CustomItem)` | アイテムを登録 |
-| `get(String)` | IDでアイテムを取得 |
-| `getFromItemStack(ItemStack)` | ItemStackから取得 |
-| `getByNamespace(String)` | namespaceで検索 |
-| `getAllItems()` | 全アイテムを取得 |
-
-### CustomDataComponent
-
-サポートする型:
-- `Integer` / `Long` / `Byte`
-- `Double` / `Float`
-- `String`
-- `Boolean`
-- `byte[]` / `int[]` / `long[]`
-
-## 🎮 コマンド
-
-### `/customitem give <player> <itemId> [amount]`
-プレイヤーにカスタムアイテムを付与
-
-### `/listitems [namespace]`
-登録されているカスタムアイテムを一覧表示
-
-## 🔧 設定
-
-`config.yml`で以下の設定が可能:
-```yaml
-debug: false
-log-registration: true
-max-registered-items: 0
-default-stack-size: 1
+```java
+// ビルダーパターンで作成
+new CustomItemBuilder("myplugin:chip", Material.DIAMOND)
+    .displayName("§b特殊なチップ")
+    .lore("§7これは特別なチップです")
+    .customModelData(1)
+    .buildAndRegister();
 ```
 
-## 📖 ドキュメント
+### 3. アイテムの取得
 
-詳細なドキュメントは[Wiki](https://github.com/ntn929/PaperItemAPI/wiki)を参照してください。
+```java
+CustomItem item = CustomItemAPI.getCustomItem("myplugin:chip");
+ItemStack itemStack = item.toItemStack();
+player.getInventory().addItem(itemStack);
+```
 
-## 🤝 コントリビューション
+### 4. ItemStackからカスタムアイテムを判定
 
-プルリクエストを歓迎します！
+```java
+CustomItem customItem = CustomItemAPI.getCustomItem(itemStack);
+if (customItem != null) {
+    // カスタムアイテムです
+    String id = customItem.getId();
+}
 
-1. Fork する
-2. Feature ブランチを作成 (`git checkout -b feature/amazing-feature`)
-3. 変更をコミット (`git commit -m 'Add amazing feature'`)
-4. ブランチにプッシュ (`git push origin feature/amazing-feature`)
-5. Pull Request を作成
+// または
+if (CustomItemAPI.isCustomItem(itemStack, "myplugin:chip")) {
+    // myplugin:chipです
+}
+```
 
-## 📝 ライセンス
+## プロジェクト構造
 
-このプロジェクトは[MIT License](LICENSE)の下でライセンスされています。
+```
+CustomItemAPI/
+├── src/
+│   └── main/
+│       └── java/
+│           └── com/github/ntn929/customitemapi/
+│               ├── CustomItem.java          # カスタムアイテムクラス
+│               ├── CustomItemAPI.java       # APIメインクラス
+│               └── CustomItemBuilder.java   # ビルダークラス
+├── pom.xml
+├── jitpack.yml
+└── README.md
+```
 
-## 👤 作者
+## ライセンス
 
-**ntn929**
-
-- GitHub: [@ntn929](https://github.com/ntn929)
-
-## 🙏 謝辞
-
-- [PaperMC](https://papermc.io/) - 素晴らしいサーバーソフトウェア
-- Minecraft コミュニティ
-
----
-
-⭐ このプロジェクトが役に立ったらスターをお願いします！
+MIT License

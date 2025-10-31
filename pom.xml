@@ -4,20 +4,18 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>io.github.ntn929</groupId>
-    <artifactId>paperitemapi</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <groupId>com.github.yourusername</groupId>
+    <artifactId>CustomItemAPI</artifactId>
+    <version>1.0.0</version>
     <packaging>jar</packaging>
 
-    <name>PaperItemAPI</name>
-    <description>Custom Data Component API for Paper 1.21.8</description>
-    <url>https://github.com/ntn929/PaperItemAPI</url>
+    <name>CustomItemAPI</name>
+    <description>カスタムアイテムを簡単に作成できるAPI for Paper 1.21.8</description>
 
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
-        <paper.version>1.21.3-R0.1-SNAPSHOT</paper.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <repositories>
@@ -28,24 +26,15 @@
     </repositories>
 
     <dependencies>
-        <!-- Paper API -->
         <dependency>
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
-            <version>${paper.version}</version>
+            <version>1.21.1-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
 
     <build>
-        <finalName>${project.artifactId}-${project.version}</finalName>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-            </resource>
-        </resources>
-
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -58,27 +47,30 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.5.1</version>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.3.0</version>
                 <executions>
                     <execution>
-                        <phase>package</phase>
+                        <id>attach-sources</id>
                         <goals>
-                            <goal>shade</goal>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.6.0</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
                         </goals>
                     </execution>
                 </executions>
             </plugin>
         </plugins>
     </build>
-
-    <!-- JitPack用の配布設定 -->
-    <distributionManagement>
-        <repository>
-            <id>github</id>
-            <name>GitHub ntn929 Apache Maven Packages</name>
-            <url>https://maven.pkg.github.com/ntn929/PaperItemAPI</url>
-        </repository>
-    </distributionManagement>
-
 </project>
